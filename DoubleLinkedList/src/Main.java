@@ -1,0 +1,331 @@
+import java.io.*;
+import java.util.*;
+import java.text.*;
+import java.math.*;
+import java.util.regex.*;
+
+interface ILinkedList {
+    /**
+     * Inserts a specified element at the specified position in the list.
+     * @param index
+     * @param element
+     */
+    public void add(int index, Object element);
+    /**
+     * Inserts the specified element at the end of the list.
+     * @param element
+     */
+    public void add(Object element);
+    /**
+     * @param index
+     * @return the element at the specified position in this list.
+     */
+    public Object get(int index);
+
+    /**
+     * Replaces the element at the specified position in this list with the
+     * specified element.
+     * @param index
+     * @param element
+     */
+    public void set(int index, Object element);
+    /**
+     * Removes all of the elements from this list.
+     */
+    public void clear();
+    /**
+     * @return true if this list contains no elements.
+     */
+    public boolean isEmpty();
+    /**
+     * Removes the element at the specified position in this list.
+     * @param index
+     */
+    public void remove(int index);
+    /**
+     * @return the number of elements in this list.
+     */
+    public int size();
+    /**
+     * @param fromIndex
+     * @param toIndex
+     * @return a view of the portion of this list between the specified fromIndex and toIndex, inclusively.
+     */
+    public ILinkedList sublist(int fromIndex, int toIndex);
+    /**
+     * @param o
+     * @return true if this list contains an element with the same value as the specified element.
+     */
+    public boolean contains(Object o);
+}
+
+
+class DoubleLinkedList implements ILinkedList {
+    /* Implement your linked list class here*/
+
+    class Node
+    {
+        Object data;
+        Node next=null,prev=null;
+        Node(Object data){this.data=data;}
+    }
+    public static Node head;
+
+    public void add(int index, Object element)
+    {
+        Node node=new Node(element);
+        if(this.isEmpty())
+        { head=node;return;}
+        else if(index==0)
+        {
+            Node tmp = head;
+            node.next=head;
+            head.prev=node;
+            head=node;
+        }
+        else
+        {
+            Node tmp = head;
+            for(int i=0;i<index-1;i++)
+            {
+                tmp=tmp.next;
+            }
+            node.next=tmp.next;
+            tmp.next=node;
+            node.prev=tmp;
+            if(node.next!=null)
+                node.next.prev=node;
+        }
+    }
+    public void add(Object element)
+    {
+        Node node=new Node(element);
+
+        if(this.isEmpty())
+        {
+            head=node;
+            return;
+        }
+        Node tmp=head;
+
+        while (tmp.next != null) {
+            tmp = tmp.next;
+        }
+        tmp.next=node;
+        node.prev=tmp;
+    }
+    public Object get(int index)
+    {
+        Node tmp = head;
+        for(int i=0;i<index;i++)
+        {
+            tmp=tmp.next;
+        }
+        return tmp.data;
+    }
+    public void set(int index, Object element)
+    {
+        Node tmp = head;
+        for(int i=0;i<index;i++)
+        {
+            tmp=tmp.next;
+        }
+        tmp.data=element;
+    }
+    public void clear()
+    {
+        Node tmp = head;
+        while(head != null) {
+            tmp=head;
+            head=head.next;
+            tmp=null;
+        }
+    }
+    public boolean isEmpty()
+    {
+        if(head==null)
+            return true;
+        return false;
+    }
+    public void remove(int index)
+    {
+        Node tmp = head;
+        if(index==0)
+        {
+            head=tmp.next;
+            return;
+        }
+
+        for(int i=0;i<index;i++)
+        {
+            tmp=tmp.next;
+        }
+        if(tmp.next!=null)
+        {tmp.prev.next=tmp.next;
+        tmp.next.prev=tmp.prev;
+        tmp=null;}
+        else
+        {
+            tmp.prev.next=null;
+            tmp=null;
+        }
+    }
+    public int size()
+    {
+        int s = 0;
+        if(this.isEmpty())
+            return 0;
+        else {
+            Node tmp=head;
+            while (tmp.next != null) {
+                s++;
+                tmp = tmp.next;
+            }
+        }
+
+        return s+1;
+    }
+    public ILinkedList sublist(int fromIndex, int toIndex)
+    {
+        ILinkedList obj=new DoubleLinkedList();
+        System.out.print('[');
+        while (fromIndex <= toIndex)
+        {
+            System.out.print(obj.get(fromIndex));
+            if(fromIndex!=toIndex)
+                System.out.print(", ");
+            obj.add(this.get(fromIndex));
+            fromIndex++;
+        }
+        System.out.println(']');
+        return obj;
+    }
+    public boolean contains(Object o)
+    {
+        Node tmp=head;
+        if(head==null)
+            return false;
+        while (tmp.next != null) {
+            if(tmp.data==o)
+                return true;
+            tmp = tmp.next;
+        }
+        if(tmp.data==o)
+            return true;
+        return false;
+    }
+    public static void Display()
+    {
+        Node tmp=head;
+        if(tmp==null)
+        {System.out.println("[]");return;}
+        System.out.print('[');
+        while (tmp.next != null) {
+            System.out.print(tmp.data+", ");
+            tmp = tmp.next;
+        }
+        System.out.print(tmp.data);
+        System.out.println(']');
+    }
+    public static void main(String[] args) {
+        /* Enter your code here. Read input from STDIN. Print output to STDOUT */
+        ILinkedList obj=new DoubleLinkedList();
+
+        Scanner sc = new Scanner(System.in);
+        String sin = sc.nextLine().replaceAll("\\[|\\]", "");
+
+        String[] s = sin.split(", ");
+        if (s.length == 1 && s[0].isEmpty())
+        {}
+        else {
+        for(int i = 0; i < s.length; ++i)
+        {
+            obj.add(Integer.parseInt(s[i]));
+        }}
+        String operation=sc.nextLine();
+        int element,index;
+        switch(operation) {
+            case "add" :
+                element=sc.nextInt();
+                obj.add(element);
+                Display();
+                break;
+            case "addToIndex" :
+                index=sc.nextInt();
+                element=sc.nextInt();
+                if(index==obj.size())
+                {
+                    obj.add(element);Display();break;
+                }
+                if(index>obj.size()-1 || index<0){
+                    System.out.println("Error");
+                    break;
+                }
+                obj.add(index,element);
+                Display();
+                break;
+            case "get" :
+                index=sc.nextInt();
+                if(index>obj.size()-1 || index<0){
+                    System.out.println("Error");
+                    break;
+                }
+                System.out.println(obj.get(index));
+                break;
+            case "set" :
+                index=sc.nextInt();
+                if(index>obj.size()-1 || index<0){
+                    System.out.println("Error");
+                    break;
+                }
+                element=sc.nextInt();
+                obj.set(index,element);
+                Display();
+                break;
+            case "clear" :
+                obj.clear();
+                Display();
+                break;
+            case "isEmpty" :
+                if(obj.isEmpty())
+                    System.out.println("True");
+                else
+                    System.out.println("False");
+                break;
+            case "remove" :
+                index=sc.nextInt();
+                if(index>obj.size()-1 || index<0){
+                    System.out.println("Error");
+                    break;
+                }
+                obj.remove(index);
+                Display();
+                break;
+            case "sublist" :
+                int index1=sc.nextInt();
+                int index2=sc.nextInt();
+                if(index1>obj.size()-1 || index1<0){
+                    System.out.println("Error");
+                    break;
+                }
+                if(index2>obj.size()-1 || index2<0){
+                    System.out.println("Error");
+                    break;
+                }
+                ILinkedList obj2=obj.sublist(index1,index2);
+                break;
+            case "contains" :
+                element= sc.nextInt();
+                if(obj.contains(element))
+                    System.out.println("True");
+                else
+                    System.out.println("False");
+                break;
+            case "size" :
+                System.out.println(obj.size());
+                break;
+            default :
+
+        }
+    }
+}
