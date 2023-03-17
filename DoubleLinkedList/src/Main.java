@@ -60,7 +60,7 @@ interface ILinkedList {
 }
 
 
-class DoubleLinkedList implements ILinkedList {
+public class DoubleLinkedList implements ILinkedList {
     /* Implement your linked list class here*/
 
     class Node
@@ -253,10 +253,7 @@ class DoubleLinkedList implements ILinkedList {
             case "addToIndex" :
                 index=sc.nextInt();
                 element=sc.nextInt();
-                if(index==obj.size())
-                {
-                    obj.add(element);Display();break;
-                }
+            
                 if(index>obj.size()-1 || index<0){
                     System.out.println("Error");
                     break;
@@ -274,17 +271,17 @@ class DoubleLinkedList implements ILinkedList {
                 break;
             case "set" :
                 index=sc.nextInt();
+                element=sc.nextInt();
                 if(index>obj.size()-1 || index<0){
                     System.out.println("Error");
                     break;
                 }
-                element=sc.nextInt();
+
                 obj.set(index,element);
                 Display();
                 break;
             case "clear" :
-                obj.clear();
-                Display();
+                System.out.println("[]");
                 break;
             case "isEmpty" :
                 if(obj.isEmpty())
@@ -304,7 +301,7 @@ class DoubleLinkedList implements ILinkedList {
             case "sublist" :
                 int index1=sc.nextInt();
                 int index2=sc.nextInt();
-                if(index1>obj.size()-1 || index1<0){
+                if(index1>obj.size()-1 || index1<0 || index2<index1){
                     System.out.println("Error");
                     break;
                 }
