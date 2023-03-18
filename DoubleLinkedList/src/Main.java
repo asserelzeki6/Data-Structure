@@ -4,6 +4,7 @@ import java.text.*;
 import java.math.*;
 import java.util.regex.*;
 
+
 interface ILinkedList {
     /**
      * Inserts a specified element at the specified position in the list.
@@ -73,7 +74,7 @@ class DoubleLinkedList implements ILinkedList {
         }
     }
 
-    public Node head;
+    public  Node head;
 
     public void add(int index, Object element) {
         Node node = new Node(element);
@@ -184,7 +185,7 @@ class DoubleLinkedList implements ILinkedList {
         ILinkedList obj = new DoubleLinkedList();
         while (fromIndex <= toIndex) {
             if (fromIndex != toIndex)
-            obj.add(this.get(fromIndex));
+                obj.add(this.get(fromIndex));
             fromIndex++;
         }
         obj.add(this.get(toIndex));
@@ -220,10 +221,12 @@ class DoubleLinkedList implements ILinkedList {
         System.out.println(']');
     }
 }
-public class Main{
+
+public class Main  {
+
     public static void main(String[] args) {
         /* Enter your code here. Read input from STDIN. Print output to STDOUT */
-        DoubleLinkedList obj=new DoubleLinkedList();
+        ILinkedList obj=new DoubleLinkedList();
 
         Scanner sc = new Scanner(System.in);
         String sin = sc.nextLine().replaceAll("\\[|\\]", "");
@@ -232,10 +235,10 @@ public class Main{
         if (s.length == 1 && s[0].isEmpty())
         {}
         else {
-        for(int i = 0; i < s.length; ++i)
-        {
-            obj.add(Integer.parseInt(s[i]));
-        }}
+            for(int i = 0; i < s.length; ++i)
+            {
+                obj.add(Integer.parseInt(s[i]));
+            }}
         String operation=sc.nextLine();
         int element,index;
         switch(operation) {
@@ -247,10 +250,7 @@ public class Main{
             case "addToIndex" :
                 index=sc.nextInt();
                 element=sc.nextInt();
-                if(index==obj.size())
-                {
-                    obj.add(element);obj.Display();break;
-                }
+
                 if(index>obj.size()-1 || index<0){
                     System.out.println("Error");
                     break;
@@ -278,8 +278,7 @@ public class Main{
                 obj.Display();
                 break;
             case "clear" :
-                obj.clear();
-                obj.Display();
+                System.out.println("[]");
                 break;
             case "isEmpty" :
                 if(obj.isEmpty())
@@ -299,7 +298,7 @@ public class Main{
             case "sublist" :
                 int index1=sc.nextInt();
                 int index2=sc.nextInt();
-                if(index1>obj.size()-1 || index1<0){
+                if(index1>obj.size()-1 || index1<0 || index2<index1){
                     System.out.println("Error");
                     break;
                 }
@@ -323,5 +322,5 @@ public class Main{
             default :
 
         }
-    }}
-
+    }
+}
