@@ -57,179 +57,173 @@ interface ILinkedList {
      * @return true if this list contains an element with the same value as the specified element.
      */
     public boolean contains(Object o);
+    public  void Display();
 }
 
 
-public class DoubleLinkedList implements ILinkedList {
+class DoubleLinkedList implements ILinkedList {
     /* Implement your linked list class here*/
 
-    class Node
-    {
+    class Node {
         Object data;
-        Node next=null,prev=null;
-        Node(Object data){this.data=data;}
-    }
-    public static Node head;
+        Node next = null, prev = null;
 
-    public void add(int index, Object element)
-    {
-        Node node=new Node(element);
-        if(this.isEmpty())
-        { head=node;return;}
-        else if(index==0)
-        {
-            Node tmp = head;
-            node.next=head;
-            head.prev=node;
-            head=node;
+        Node(Object data) {
+            this.data = data;
         }
-        else
-        {
+    }
+
+    public Node head;
+
+    public void add(int index, Object element) {
+        Node node = new Node(element);
+        if (this.isEmpty()) {
+            this.head = node;
+            return;
+        } else if (index == 0) {
+            Node tmp = this.head;
+            node.next = this.head;
+            this.head.prev = node;
+            this.head = node;
+        } else {
             Node tmp = head;
-            for(int i=0;i<index-1;i++)
-            {
-                tmp=tmp.next;
+            for (int i = 0; i < index - 1; i++) {
+                tmp = tmp.next;
             }
-            node.next=tmp.next;
-            tmp.next=node;
-            node.prev=tmp;
-            if(node.next!=null)
-                node.next.prev=node;
+            node.next = tmp.next;
+            tmp.next = node;
+            node.prev = tmp;
+            if (node.next != null)
+                node.next.prev = node;
         }
     }
-    public void add(Object element)
-    {
-        Node node=new Node(element);
 
-        if(this.isEmpty())
-        {
-            head=node;
+    public void add(Object element) {
+        Node node = new Node(element);
+
+        if (this.isEmpty()) {
+            this.head = node;
             return;
         }
-        Node tmp=head;
+        Node tmp = this.head;
 
         while (tmp.next != null) {
             tmp = tmp.next;
         }
-        tmp.next=node;
-        node.prev=tmp;
+        tmp.next = node;
+        node.prev = tmp;
     }
-    public Object get(int index)
-    {
-        Node tmp = head;
-        for(int i=0;i<index;i++)
-        {
-            tmp=tmp.next;
+
+    public Object get(int index) {
+        Node tmp = this.head;
+        for (int i = 0; i < index; i++) {
+            tmp = tmp.next;
         }
         return tmp.data;
     }
-    public void set(int index, Object element)
-    {
-        Node tmp = head;
-        for(int i=0;i<index;i++)
-        {
-            tmp=tmp.next;
+
+    public void set(int index, Object element) {
+        Node tmp = this.head;
+        for (int i = 0; i < index; i++) {
+            tmp = tmp.next;
         }
-        tmp.data=element;
+        tmp.data = element;
     }
-    public void clear()
-    {
-        Node tmp = head;
-        while(head != null) {
-            tmp=head;
-            head=head.next;
-            tmp=null;
+
+    public void clear() {
+        Node tmp = this.head;
+        while (this.head != null) {
+            tmp = this.head;
+            this.head = this.head.next;
+            tmp = null;
         }
     }
-    public boolean isEmpty()
-    {
-        if(head==null)
+
+    public boolean isEmpty() {
+        if (this.head == null)
             return true;
         return false;
     }
-    public void remove(int index)
-    {
-        Node tmp = head;
-        if(index==0)
-        {
-            head=tmp.next;
+
+    public void remove(int index) {
+        Node tmp = this.head;
+        if (index == 0) {
+            this.head = tmp.next;
             return;
         }
 
-        for(int i=0;i<index;i++)
-        {
-            tmp=tmp.next;
+        for (int i = 0; i < index; i++) {
+            tmp = tmp.next;
         }
-        if(tmp.next!=null)
-        {tmp.prev.next=tmp.next;
-        tmp.next.prev=tmp.prev;
-        tmp=null;}
-        else
-        {
-            tmp.prev.next=null;
-            tmp=null;
+        if (tmp.next != null) {
+            tmp.prev.next = tmp.next;
+            tmp.next.prev = tmp.prev;
+            tmp = null;
+        } else {
+            tmp.prev.next = null;
+            tmp = null;
         }
     }
-    public int size()
-    {
+
+    public int size() {
         int s = 0;
-        if(this.isEmpty())
+        if (this.isEmpty())
             return 0;
         else {
-            Node tmp=head;
+            Node tmp = this.head;
             while (tmp.next != null) {
                 s++;
                 tmp = tmp.next;
             }
         }
 
-        return s+1;
+        return s + 1;
     }
-    public ILinkedList sublist(int fromIndex, int toIndex)
-    {
-        ILinkedList obj=new DoubleLinkedList();
-        System.out.print('[');
-        while (fromIndex <= toIndex)
-        {
-            System.out.print(obj.get(fromIndex));
-            if(fromIndex!=toIndex)
-                System.out.print(", ");
+
+    public ILinkedList sublist(int fromIndex, int toIndex) {
+        ILinkedList obj = new DoubleLinkedList();
+        while (fromIndex <= toIndex) {
+            if (fromIndex != toIndex)
             obj.add(this.get(fromIndex));
             fromIndex++;
         }
-        System.out.println(']');
+        obj.add(this.get(toIndex));
         return obj;
     }
-    public boolean contains(Object o)
-    {
-        Node tmp=head;
-        if(head==null)
+
+    public boolean contains(Object o) {
+        Node tmp = this.head;
+        if (this.head == null)
             return false;
         while (tmp.next != null) {
-            if(tmp.data==o)
+            if (tmp.data == o)
                 return true;
             tmp = tmp.next;
         }
-        if(tmp.data==o)
+        if (tmp.data == o)
             return true;
         return false;
     }
-    public static void Display()
-    {
-        Node tmp=head;
-        if(tmp==null)
-        {System.out.println("[]");return;}
+
+    public  void Display() {
+        Node tmp = this.head;
+        if (tmp == null) {
+            System.out.println("[]");
+            return;
+        }
         System.out.print('[');
         while (tmp.next != null) {
-            System.out.print(tmp.data+", ");
+            System.out.print(tmp.data + ", ");
             tmp = tmp.next;
         }
         System.out.print(tmp.data);
         System.out.println(']');
     }
+}
+public class Main{
     public static void main(String[] args) {
         /* Enter your code here. Read input from STDIN. Print output to STDOUT */
-        ILinkedList obj=new DoubleLinkedList();
+        DoubleLinkedList obj=new DoubleLinkedList();
 
         Scanner sc = new Scanner(System.in);
         String sin = sc.nextLine().replaceAll("\\[|\\]", "");
@@ -248,18 +242,21 @@ public class DoubleLinkedList implements ILinkedList {
             case "add" :
                 element=sc.nextInt();
                 obj.add(element);
-                Display();
+                obj.Display();
                 break;
             case "addToIndex" :
                 index=sc.nextInt();
                 element=sc.nextInt();
-            
+                if(index==obj.size())
+                {
+                    obj.add(element);obj.Display();break;
+                }
                 if(index>obj.size()-1 || index<0){
                     System.out.println("Error");
                     break;
                 }
                 obj.add(index,element);
-                Display();
+                obj.Display();
                 break;
             case "get" :
                 index=sc.nextInt();
@@ -278,10 +275,11 @@ public class DoubleLinkedList implements ILinkedList {
                 }
 
                 obj.set(index,element);
-                Display();
+                obj.Display();
                 break;
             case "clear" :
-                System.out.println("[]");
+                obj.clear();
+                obj.Display();
                 break;
             case "isEmpty" :
                 if(obj.isEmpty())
@@ -296,12 +294,12 @@ public class DoubleLinkedList implements ILinkedList {
                     break;
                 }
                 obj.remove(index);
-                Display();
+                obj.Display();
                 break;
             case "sublist" :
                 int index1=sc.nextInt();
                 int index2=sc.nextInt();
-                if(index1>obj.size()-1 || index1<0 || index2<index1){
+                if(index1>obj.size()-1 || index1<0){
                     System.out.println("Error");
                     break;
                 }
@@ -310,6 +308,7 @@ public class DoubleLinkedList implements ILinkedList {
                     break;
                 }
                 ILinkedList obj2=obj.sublist(index1,index2);
+                obj2.Display();
                 break;
             case "contains" :
                 element= sc.nextInt();
@@ -324,5 +323,5 @@ public class DoubleLinkedList implements ILinkedList {
             default :
 
         }
-    }
-}
+    }}
+
